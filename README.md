@@ -1,6 +1,3 @@
-Certainly! Here is the raw code for the `README.md` file:
-
-```markdown
 ### FrostDDoS: Powerful DDoS Tool for Hackers 🥇
 
 ![](https://img.shields.io/github/license/FrostFoe/FrostDDoS)
