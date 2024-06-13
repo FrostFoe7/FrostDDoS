@@ -1,140 +1,123 @@
 ### FrostDDoS: Powerful DDoS Tool for Hackers 🥇
 
-![](https://img.shields.io/github/license/FrostFoe/FrostDDoS)
-![](https://img.shields.io/github/issues/FrostFoe/FrostDDoS)
-![](https://img.shields.io/github/issues-closed/FrostFoe/FrostDDoS)
-![](https://img.shields.io/badge/Python-3-blue)
-![](https://img.shields.io/github/forks/FrostFoe/FrostDDoS)
-![](https://img.shields.io/github/stars/FrostFoe/FrostDDoS)
-![](https://img.shields.io/github/last-commit/FrostFoe/FrostDDoS)
+<p align="center">
+  <img src="https://img.shields.io/badge/FrostDDoS-v1.0-blue" alt="FrostDDoS">
+  <img src="https://img.shields.io/github/license/FrostFoe/FrostDDoS" alt="License">
+  <img src="https://img.shields.io/github/issues/FrostFoe/FrostDDoS" alt="Issues">
+  <img src="https://img.shields.io/github/issues-closed/FrostFoe/FrostDDoS" alt="Issues Closed">
+  <img src="https://img.shields.io/badge/Python-3-blue" alt="Python Version">
+  <img src="https://img.shields.io/github/forks/FrostFoe/FrostDDoS" alt="Forks">
+  <img src="https://img.shields.io/github/stars/FrostFoe/FrostDDoS" alt="Stars">
+  <img src="https://img.shields.io/github/last-commit/FrostFoe/FrostDDoS" alt="Last Commit">
+  <img src="https://img.shields.io/badge/platform-Linux%20%7C%20KaliLinux%20%7C%20ParrotOs%20%7C%20Termux-blue" alt="Platforms">
+  <a href="http://hits.dwyl.com/FrostFoe/FrostDDoS"><img src="http://hits.dwyl.com/FrostFoe/FrostDDoS.svg" alt="HitCount"></a>
+</p>
 
-[![HitCount](http://hits.dwyl.com/FrostFoe/FrostDDoS.svg)](http://hits.dwyl.com/FrostFoe/FrostDDoS)
-![](https://img.shields.io/badge/platform-Linux%20%7C%20KaliLinux%20%7C%20ParrotOs-blue)
+<p align="center">
+  <img src="https://github-readme-stats.vercel.app/api?username=FrostFoe&show_icons=true&title_color=fff&icon_color=79ff97&text_color=9f9f9f&bg_color=151515" alt="GitHub Stats">
+</p>
 
-## Update Available V1.2.0 🚀
+## 🌟 Introduction
 
-- [✔] Installation Bug Fixed
-- [✔] Added New DDoS Attack Techniques
-  - [✔] SYN Flood
-  - [✔] UDP Flood
-  - [✔] HTTP Flood
-  - [✔] Slowloris
-  - [✔] LOIC (Low Orbit Ion Cannon)
+FrostDDoS is a powerful and efficient tool designed to test the robustness and security of servers by simulating Distributed Denial of Service (DDoS) attacks. This tool is intended for **educational purposes** and should only be used on systems you own or have explicit permission to test.
 
-## FrostDDoS Features 🛠️
+---
 
-- [SYN Flood Attack](#syn-flood-attack)
-- [UDP Flood Attack](#udp-flood-attack)
-- [HTTP Flood Attack](#http-flood-attack)
-- [Slowloris Attack](#slowloris-attack)
-- [LOIC Attack](#loic-attack)
+## 🎨 Features
 
-### SYN Flood Attack
-A type of DoS attack that sends a succession of SYN requests to a target's system.
+- **🔥 Multi-threaded Attacks**: Utilize up to hundreds of threads for a more powerful attack.
+- **🛡️ Proxy Support**: Use proxies to anonymize your attacks.
+- **🕵️‍♂️ Random User Agents and Referers**: Mimic realistic traffic patterns.
+- **📊 Colorful and Informative Attack Reports**: Real-time updates on the status of your attack.
+- **⚙️ Customizable Parameters**: Easily adjust target server, port, number of threads, attack duration, and proxy list.
 
-### UDP Flood Attack
-A type of DoS attack where the attacker overwhelms random ports on the target with IP packets containing UDP datagrams.
+---
 
-### HTTP Flood Attack
-An attack that mimics normal user behavior by making many HTTP GET or POST requests to a web server, overloading it.
+## ⚡ Installation
 
-### Slowloris Attack
-A type of attack that keeps many connections to the target web server open and holds them open as long as possible.
+To get started with FrostDDoS, clone the repository and install the required dependencies:
 
-### LOIC Attack
-A simple but powerful tool to perform DDoS attacks, commonly used for stress testing.
-
-## Installation Instructions 🛠️
-
-### Step 1: Clone the FrostDDoS repository
+### On Linux, Kali Linux, Parrot OS:
 
 ```bash
-git clone https://github.com/FrostFoe/FrostDDoS.git
-```
-
-### Step 2: Give Permission to FrostDDoS
-
-```bash
-chmod -R 755 FrostDDoS
-```
-
-### Step 3: Move to FrostDDoS directory
-
-```bash
+git clone https://github.com/yourusername/FrostDDoS.git
 cd FrostDDoS
+pip install -r requirements.txt
 ```
 
-### Step 4: Run FrostDDoS
+### On Termux:
 
 ```bash
-sudo python3 FrostDDoS.py
+pkg install git python
+git clone https://github.com/yourusername/FrostDDoS.git
+cd FrostDDoS
+pip install -r requirements.txt
 ```
 
-## Running FrostDDoS 🏃‍♂️
+---
+
+## 🚀 Usage
+
+To run FrostDDoS, use the following command:
 
 ```bash
-Select DDoS Attack Type:
-    [1] SYN Flood Attack
-    [2] UDP Flood Attack
-    [3] HTTP Flood Attack
-    [4] Slowloris Attack
-    [5] LOIC Attack
-    [0] Exit
-
-Enter the option and continue.
+python FDoS.py -s <server_ip> -p <port> -t <turbo> -d <duration> [--proxy <proxy_file>]
 ```
 
-## Docker Installation 🐳
+### Arguments
 
-### Create Docker Image
+- `-s, --server`: **Required.** The IP address of the target server.
+- `-p, --port`: The port of the target server (default: 80).
+- `-t, --turbo`: The number of threads to use (default: 300).
+- `-d, --duration`: The duration of the attack in seconds (default: 60).
+- `--proxy`: Optional. Path to a file containing a list of proxies.
+
+### Example
 
 ```bash
-docker build -t frostfoe/frostddos .
+python FDoS.py -s 192.168.1.1 -p 80 -t 300 -d 60 --proxy proxies.txt
 ```
 
-### Run as container
+---
 
-```bash
-docker-compose up -d
-```
+## 📂 Files
 
-### Interact with terminal
+- `FDoS.py`: The main script for performing DDoS attacks.
+- `useragents.txt`: List of random user agents to simulate different browsers.
+- `referers.txt`: List of random referers to simulate traffic from various sources.
+- `proxy.txt`: List of proxies to anonymize attacks (if used).
+- `requirements.txt`: Required Python packages.
 
-- Get into the container
+---
 
-```bash
-docker exec -it frostddos bash
-```
+## 📜 License
 
-**OUTPUT:**
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
-```bash
-Select Best Option:
-    [1] SYN Flood Attack
-    [2] UDP Flood Attack
-    [3] HTTP Flood Attack
-    [4] Slowloris Attack
-    [5] LOIC Attack
-    [0] Exit
-```
+---
 
-Enter the options and continue.
+## ⚠️ Disclaimer
 
-## Important Notice 📢
+**Warning**: This tool is for educational purposes only. Unauthorized use of this tool against systems you do not own or have permission to test is illegal and unethical. The author is not responsible for any misuse or damage caused by this tool.
 
-Please Don't Use FrostDDoS for illegal activities. This tool is designed for testing and educational purposes only.
+---
 
-## Social Media 📬
+## 🤝 Contribution
 
-[![Twitter](https://img.shields.io/twitter/url?color=%231DA1F2&label=follow&logo=twitter&logoColor=%231DA1F2&style=flat-square&url=https%3A%2F%2Fwww.reddit.com%2Fuser%2FFatChicken277)](https://twitter.com/_Zinzu07)
-[![GitHub](https://img.shields.io/badge/-GitHub-181717?style=flat-square&logo=github&link=https://github.com/FrostFoe/)](https://github.com/FrostFoe/)
+Contributions are welcome! Please open an issue or submit a pull request for any changes or improvements.
 
-##### Your Favourite Tool is not in FrostDDoS or have Suggestions? Please [CLICK HERE](https://forms.gle/b235JoCKyUq5iM3t8)
+---
 
-![FrostFoe's github stats](https://github-readme-stats.vercel.app/api?username=FrostFoe&show_icons=true&title_color=fff&icon_color=79ff97&text_color=9f9f9f&bg_color=151515)
+## 📧 Contact
 
-#### Don't Forget to Share with Your Friends
+For any inquiries, please contact the author at frostfoe@example.com.
 
-### Stay Updated for New Releases
+---
 
-#### Thank you..!!
+<p align="center">
+  <b>Let the Dragon's Wrath begin...🔥🐉💥🌋</b>
+</p>
+
+---
+
+## 🔥 Attack Preview
