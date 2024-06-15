@@ -2,19 +2,19 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/FrostDDoS-v1.0-blue" alt="FrostDDoS">
-  <img src="https://img.shields.io/github/license/FrostFoe/FrostDDoS" alt="License">
-  <img src="https://img.shields.io/github/issues/FrostFoe/FrostDDoS" alt="Issues">
-  <img src="https://img.shields.io/github/issues-closed/FrostFoe/FrostDDoS" alt="Issues Closed">
+  <img src="https://img.shields.io/github/license/FrostFoe7/FrostDDoS" alt="License">
+  <img src="https://img.shields.io/github/issues/FrostFoe7/FrostDDoS" alt="Issues">
+  <img src="https://img.shields.io/github/issues-closed/FrostFoe7/FrostDDoS" alt="Issues Closed">
   <img src="https://img.shields.io/badge/Python-3-blue" alt="Python Version">
-  <img src="https://img.shields.io/github/forks/FrostFoe/FrostDDoS" alt="Forks">
-  <img src="https://img.shields.io/github/stars/FrostFoe/FrostDDoS" alt="Stars">
-  <img src="https://img.shields.io/github/last-commit/FrostFoe/FrostDDoS" alt="Last Commit">
+  <img src="https://img.shields.io/github/forks/FrostFoe7/FrostDDoS" alt="Forks">
+  <img src="https://img.shields.io/github/stars/FrostFoe7/FrostDDoS" alt="Stars">
+  <img src="https://img.shields.io/github/last-commit/FrostFoe7/FrostDDoS" alt="Last Commit">
   <img src="https://img.shields.io/badge/platform-Linux%20%7C%20KaliLinux%20%7C%20ParrotOs%20%7C%20Termux-blue" alt="Platforms">
-  <a href="http://hits.dwyl.com/FrostFoe/FrostDDoS"><img src="http://hits.dwyl.com/FrostFoe/FrostDDoS.svg" alt="HitCount"></a>
+  <a href="http://hits.dwyl.com/FrostFoe7/FrostDDoS"><img src="http://hits.dwyl.com/FrostFoe7/FrostDDoS.svg" alt="HitCount"></a>
 </p>
 
 <p align="center">
-  <img src="https://github-readme-stats.vercel.app/api?username=FrostFoe&show_icons=true&title_color=fff&icon_color=79ff97&text_color=9f9f9f&bg_color=151515" alt="GitHub Stats">
+  <img src="https://github-readme-stats.vercel.app/api?username=FrostFoe7&show_icons=true&title_color=fff&icon_color=79ff97&text_color=9f9f9f&bg_color=151515" alt="GitHub Stats">
 </p>
 
 ## 🌟 Introduction
