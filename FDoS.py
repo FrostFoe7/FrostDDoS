@@ -53,7 +53,7 @@ def center_text(text):
     return "\n".join(centered_lines)
 
 colored_ascii_art = custom_gradient(selected_gradient[0], selected_gradient[1], ascii_art)
-colored_ascii_art += "\nCoded By CH3COOH\n"
+colored_ascii_art += "\nCoded By Kalatupi\n"
 centered_output = center_text(colored_ascii_art)
 
 print(centered_output)
