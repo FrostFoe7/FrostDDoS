@@ -1,12 +1,69 @@
+import random
 import shutil
 import sys
 import time
 import socket
 import threading
-import random
 from argparse import ArgumentParser
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import requests
+
+# ASCII Art and Custom Gradient
+ascii_art = '''
+
+                                     
+ _____             _   _____         
+|   __|___ ___ ___| |_|   __|___ ___ 
+|   __|  _| . |_ -|  _|   __| . | -_|
+|__|  |_| |___|___|_| |__|  |___|___|
+                                     
+
+ '''
+
+custom_gradients = [
+    ["\033[91m", "\033[93m"],
+    ["\033[94m", "\033[96m"],
+    ["\033[95m", "\033[35m"],
+    ["\033[92m", "\033[93m"],
+    ["\033[91m", "\033[95m"],
+    ["\033[93m", "\033[94m"],
+    ["\033[97m", "\033[90m"],
+    ["\033[91m", "\033[97m"],
+    ["\033[95m", "\033[96m"],
+    ["\033[92m", "\033[94m"],
+]
+
+selected_gradient = random.choice(custom_gradients)
+
+def custom_gradient(start_color, end_color, text):
+    length = len(text)
+    gradient_text = ""
+    for i, char in enumerate(text):
+        if char == '\n':
+            gradient_text += char
+            continue
+        ratio = i / length
+        color = start_color if ratio < 0.5 else end_color
+        gradient_text += color + char
+    return gradient_text + "\033[0m"
+
+def center_text(text):
+    terminal_width = shutil.get_terminal_size().columns
+    lines = text.splitlines()
+    centered_lines = [line.center(terminal_width) for line in lines]
+    return "\n".join(centered_lines)
+
+colored_ascii_art = custom_gradient(selected_gradient[0], selected_gradient[1], ascii_art)
+colored_ascii_art += "\nCoded By CH3COOH\n"
+centered_output = center_text(colored_ascii_art)
+
+print(centered_output)
+
+# DoS Attack Code
+successful_attacks = 0
+failed_attacks = 0
+counter_lock = threading.Lock()
+
+dragon_names = ["Smaug", "Draco", "Toothless"]
 
 def random_color():
     return f"\033[38;2;{random.randint(0, 255)};{random.randint(0, 255)};{random.randint(0, 255)}m"
@@ -35,14 +92,6 @@ def check_proxy(proxy):
             return True
     except Exception:
         return False
-
-successful_attacks = 0
-failed_attacks = 0
-counter_lock = threading.Lock()
-
-dragon_names = [
-    "Smaug", "Draco", "Toothless"
-]
 
 def attack(host, port, duration, proxy=None):
     global successful_attacks, failed_attacks
